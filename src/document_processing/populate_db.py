@@ -101,6 +101,3 @@ if __name__ == "__main__":
         file_path='data/test.pdf',
         reset_collection=True
     )
-    from src.document_processing.retriever import DocumentRetriever
-    retriever = DocumentRetriever(collection_name="test_collection", embedding_function=populator.ollama_ef)
-    print(retriever.get_chunks(query="What is the main topic of the document?"))
