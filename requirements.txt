@@ -6,3 +6,7 @@ langchain-huggingface
 langchain-ollama
 llama-cloud-services
 llama-index
+Pillow
+python-dotenv
+loguru
+streamlit
