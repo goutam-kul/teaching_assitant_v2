@@ -5,10 +5,7 @@ from src.document_processing.ollama_embedding import OllamaEmbeddingFunction
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 from pathlib import Path
-import logging
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 class DocumentPopulator:
     """Class to populate the database with documents."""
@@ -97,7 +94,7 @@ class DocumentPopulator:
 if __name__ == "__main__":
     populator = DocumentPopulator()
     result = populator.process_file_and_add_to_db(
-        collection_name='test_collection',
-        file_path='data/test.pdf',
+        collection_name='statistics_book',
+        file_path='data/statistics_book.pdf',
         reset_collection=True
     )

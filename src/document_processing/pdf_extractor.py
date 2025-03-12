@@ -3,12 +3,10 @@ from dotenv import load_dotenv
 from llama_cloud_services import LlamaParse
 from llama_index.core import SimpleDirectoryReader
 import os
-import logging
 import re
+from loguru import logger
 load_dotenv()
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 class PDFParser:
     """Simple PDF parser using LlamaParse."""
