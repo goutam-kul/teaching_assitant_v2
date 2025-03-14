@@ -2,12 +2,13 @@ from typing import List, Dict, Any
 from langchain_ollama import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from src.config.prompts import TEMPLATE, QUERY_VARIANT_PROMPT, QUESTION_FROM_TOPIC_PROMPT
+from src.config.prompts import TEMPLATE, QUERY_VARIANT_PROMPT, QUESTION_FROM_TOPIC_PROMPT, EVALUATE_TEST_PROMPT
 from loguru import logger
 from src.config.settings import get_settings
 from io import BytesIO
 from PIL import Image
 import base64
+import json
 
 settings = get_settings()
 
@@ -47,11 +48,43 @@ class LLMHandler:
         prompt = QUERY_VARIANT_PROMPT.format(question=question)
         return self.text_model.invoke(prompt)
     
-    def generat_questions_from_topic(self, topic: str) -> List[str]:
+    def generat_questions_from_topic(self, topic: str, num_questions: int) -> Dict[str, Any]:
         """Generate questions from a given topic."""
         logger.info(f"Generating question for topic: {topic}")
-        prompt = QUESTION_FROM_TOPIC_PROMPT.format(topic=topic)
+        prompt = QUESTION_FROM_TOPIC_PROMPT.format(topic=topic, num_questions=num_questions)
         return self.text_model.invoke(prompt)
+    
+    def evaluate_test(self, question_answer_pair: Dict[str, Any]) -> Dict[str, Any]:
+        """Evaluate the test answers."""
+        try:
+            logger.info("Evaluating the answers")
+            # Format the question_answer_pair as a string for better prompt formatting
+            formatted_pairs = json.dumps(question_answer_pair, indent=2)
+            logger.info(f"Formatted question answer pairs: {formatted_pairs}")
+            
+            # Create and format the prompt
+            prompt = EVALUATE_TEST_PROMPT.format(question_answer_pair=formatted_pairs)
+            logger.info(f"Generated prompt: {prompt}")
+            
+            # Get response from LLM
+            response = self.text_model.invoke(prompt)
+            logger.info(f"Raw LLM response: {response}")
+            
+            # Try to parse the response as JSON
+            if isinstance(response, str):
+                try:
+                    response = json.loads(response)
+                    logger.info(f"Parsed response: {response}")
+                except json.JSONDecodeError as e:
+                    logger.error(f"Failed to parse LLM response as JSON: {response}")
+                    logger.error(f"JSON decode error: {str(e)}")
+                    return {"error": "Failed to parse evaluation response"}
+            
+            return response
+        except Exception as e:
+            logger.error(f"Error in evaluate_test: {str(e)}")
+            return {"error": f"Evaluation failed: {str(e)}"}
+
 
 if __name__ == "__main__":
     llm = LLMHandler()

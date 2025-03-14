@@ -44,7 +44,7 @@ QUESTION_FROM_TOPIC_PROMPT = """You are a teaching assistant, you job is to gene
 RETURN the questions as a valid JSON response ONLY.
 
 INSTRUCTIONS:
-- Generate 10 questions on the provided topic.
+- Generate {num_questions} questions on the provided topic.
 - The questions MUST be related to the provided topic.
 - The question MUST not be duplicates.
 - The questions should test the understanding of the topic.
@@ -67,3 +67,31 @@ OUTPUT FORMAT:
 }}
 Topic: {topic}
 """
+
+EVALUATE_TEST_PROMPT = """You are a teaching assistant, your job is to evaluate the answer written by the user for the respective question.
+
+Question answer pairs to evaluate:
+{question_answer_pair}
+
+INSTRUCTIONS:
+- Evaluate the answers provided by the student.
+- Score the answer between 0 and 5.
+- 0 means the answer is incorrect.
+- 1 means the answer is partially correct.
+- 2 means the answer is correct.
+- 3 means the answer is correct and the student has applied the knowledge.
+- 4 means the answer is correct and the student has applied the knowledge and the student has analyzed the topic.
+- 5 means the answer is correct and the student has applied the knowledge and the student has analyzed the topic and the student has synthesized the topic.
+
+You must return a JSON object where each key matches the original question number and contains a score and feedback.
+For example, if the input has question1 and question2, your response should look exactly like this:
+{{
+    "question1": {{
+        "score": 3,
+        "feedback": "Detailed feedback for question 1"
+    }},
+    "question2": {{
+        "score": 4,
+        "feedback": "Detailed feedback for question 2"
+    }}
+}}"""

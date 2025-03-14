@@ -69,6 +69,14 @@ def display_chat_interface():
     st.title("Teaching Assistant")
     st.markdown("Ask questions about the uploaded documents or generate image captions")
 
+    # Test generator
+    st.sidebar.header("Test Generator")
+    if st.sidebar.button("Generate Test"):
+        with st.spinner("Generating test..."):
+            test_result = st.session_state['doc_processor'].generate_test()
+            st.sidebar.success("Test generated successfully!")
+            st.sidebar.write(test_result)
+
     # Collection selector
     if st.session_state['collections']:
         selected_collection = st.selectbox(

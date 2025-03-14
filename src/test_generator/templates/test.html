@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Generator</title>
+    <style>
+        .question {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        .question h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .question textarea {
+            width: 90%;
+            padding: 10px;
+            border: 1px solid #c5dcc6;
+            border-radius: 10px;
+        }
+        .submit-button {
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-weight: bold;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 10px 20px;
+            font-size: 20px;
+        }
+        .submit-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script>
+        function submitTest() {
+            const form = document.getElementById('test-form');
+            form.submit();
+        }
+    </script>
+</head>
+<body>
+    <h1 align="center">Test on {{topic}} </h1>
+    <form id="test-form" action="/submit_test" method="POST">
+        <div id="test-container">
+            {% for question in questions %}
+                <div class="question">
+                    <h2>{% if question is string %}{{ question }}{% else %}{{ question.question }}{% endif %}</h2>
+                    <input type="hidden" name="question[]" value="{% if question is string %}{{ question }}{% else %}{{ question.question }}{% endif %}">
+                    <textarea name="answers[]" id="answer-{{ loop.index }}" placeholder="Enter your answer"></textarea>
+                </div>
+            {% endfor %}
+        </div>
+        <button type="submit" id="submit-button" class="submit-button">Submit</button>
+    </form>
+</body>
+</html>
