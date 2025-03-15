@@ -69,12 +69,13 @@
             {% if result.score is defined %}
                 {% set total_score.value = total_score.value + result.score %}
                 {% set count.value = count.value + 1 %}
+                
             {% endif %}
         {% endfor %}
         
         {% if count.value > 0 %}
             <div class="average-score">
-                Average Score: {{ "%.1f"|format(total_score.value / count.value) }} / 5.0
+                Score: {{ total_score.value }}/{{ count.value * 5 }}
             </div>
         {% endif %}
     </div>

@@ -6,6 +6,7 @@ from src.database.chroma_client import ChromaClient
 from src.document_processing.retriever import DocumentRetriever
 from src.llm.handler import LLMHandler
 from pathlib import Path
+import time 
 
 def get_existing_collections():
     """Get all the existing collections in the database"""
@@ -44,7 +45,7 @@ def upload_document():
     if uploaded_file and collection_name:
         if st.sidebar.button("Process and Upload"):
             with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
-                temp_file.write(uploaded_file.getvalue)
+                temp_file.write(uploaded_file.getvalue())
                 tmp_path = temp_file.name
 
             try:
@@ -55,7 +56,6 @@ def upload_document():
                         reset_collection=False
                     )
                     if "error" not in result:
-                        st.session_state['collections'].add(collection_name)
                         st.success(f"Document uploaded to {collection_name} successfully!")
                     else:
                         st.sidebar.error(f"Error processing document: {result['error']}")
@@ -67,15 +67,11 @@ def upload_document():
 def display_chat_interface():
     """Display the chat interface"""
     st.title("Teaching Assistant")
-    st.markdown("Ask questions about the uploaded documents or generate image captions")
+    st.markdown("Ask questions about the uploaded documents or generate image captions or take a test")
 
     # Test generator
-    st.sidebar.header("Test Generator")
-    if st.sidebar.button("Generate Test"):
-        with st.spinner("Generating test..."):
-            test_result = st.session_state['doc_processor'].generate_test()
-            st.sidebar.success("Test generated successfully!")
-            st.sidebar.write(test_result)
+    st.link_button("Take a Test", "http://127.0.0.1:5000/")
+
 
     # Collection selector
     if st.session_state['collections']:
