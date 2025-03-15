@@ -6,9 +6,18 @@ from src.database.chroma_client import ChromaClient
 @pytest.fixture(scope="function")
 def test_db_path(tmp_path):
     """Fixture to create a temporary database path for testing."""
+    # Reset the ChromaClient instance before each test
+    ChromaClient.reset_instance()
+    
     db_path = tmp_path / "test_chroma_db"
+    # Ensure the directory exists with proper permissions
+    os.makedirs(db_path, exist_ok=True)
+    os.chmod(db_path, 0o700)
+    
     yield str(db_path)
+    
     # Cleanup after tests
+    ChromaClient.reset_instance()  # Reset instance before cleanup
     if os.path.exists(db_path):
         shutil.rmtree(db_path)
 

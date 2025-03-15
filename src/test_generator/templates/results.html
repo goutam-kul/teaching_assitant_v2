@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .result-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 20px 0;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .question {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .answer {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .score {
+            font-size: 1.2em;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .score-0 { background-color: #dc3545; }
+        .score-1 { background-color: #ffc107; }
+        .score-2 { background-color: #17a2b8; }
+        .score-3 { background-color: #28a745; }
+        .score-4 { background-color: #20c997; }
+        .score-5 { background-color: #198754; }
+        .feedback {
+            color: #666;
+            font-style: italic;
+        }
+        .summary {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .average-score {
+            font-size: 1.5em;
+            color: #333;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1 align="center">Test Results</h1>
+    
+    <div class="summary">
+        {% set total_score = namespace(value=0) %}
+        {% set count = namespace(value=0) %}
+        
+        {% for question_num, result in evaluation.items() %}
+            {% if result.score is defined %}
+                {% set total_score.value = total_score.value + result.score %}
+                {% set count.value = count.value + 1 %}
+                
+            {% endif %}
+        {% endfor %}
+        
+        {% if count.value > 0 %}
+            <div class="average-score">
+                Score: {{ total_score.value }}/{{ count.value * 5 }}
+            </div>
+        {% endif %}
+    </div>
+
+    {% for question_num, result in evaluation.items() %}
+        <div class="result-card">
+            <div class="question">
+                Question {{ loop.index }}: {{ result.question }}
+            </div>
+            <div class="answer">
+                Your Answer: {{ result.answer }}
+            </div>
+            <div class="score score-{{ result.score }}">
+                Score: {{ result.score }}/5
+            </div>
+            <div class="feedback">
+                Feedback: {{ result.feedback }}
+            </div>
+        </div>
+    {% endfor %}
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/" style="
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            ">Take Another Test</a>
+    </div>
+</body>
+</html>

@@ -10,3 +10,5 @@ Pillow
 python-dotenv
 loguru
 streamlit
+flask
+pytest

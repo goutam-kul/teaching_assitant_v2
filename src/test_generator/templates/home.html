@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Generator - Home</title>
+    
+    <style>
+        .title {
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: #45a049;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .text-input {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            margin: 10px 0;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .number-input {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .number-input input {
+            padding: 10px;
+            width: 300px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Test Generator</h1>
+
+            <form action="/generate_test" method="POST">
+                <div class="text-input">
+                    <input type="text" name="topic" placeholder="Enter a topic (e.g., Statistics, Programming)" required>
+                </div>
+                <div class="number-input">
+                    <input type="number" name="num_questions" placeholder="Enter the number of questions" min="2" max="10" required>
+                </div>
+                <div class="submit">
+                    <button type="submit">Generate Test</button>
+                </div>
+            </form>
+
+    </div>
+</body>
+</html>

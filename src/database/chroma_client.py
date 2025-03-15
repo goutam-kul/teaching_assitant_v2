@@ -2,15 +2,30 @@ from typing import List, Dict, Any
 import chromadb
 from chromadb.config import Settings
 from src.document_processing.ollama_embedding import OllamaEmbeddingFunction
+import os
 
 class ChromaClient:
     """Singleton class for ChromaDB client."""
     _instance = None
 
+    @classmethod
+    def reset_instance(cls):
+        """Reset the singleton instance. Used primarily for testing."""
+        if cls._instance is not None and hasattr(cls._instance, 'client'):
+            try:
+                cls._instance.client._client.close()
+            except:
+                pass
+        cls._instance = None
+
     def __new__(cls, persist_directory: str = "db"):
         """Ensure only one instance of ChromaClient exists."""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
+            # Ensure the directory exists with proper permissions
+            if persist_directory:
+                os.makedirs(persist_directory, exist_ok=True)
+                os.chmod(persist_directory, 0o700)  # Set proper permissions
             cls._instance.client = chromadb.PersistentClient(
                 path=persist_directory,
                 settings=Settings(
