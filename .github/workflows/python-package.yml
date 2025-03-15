@@ -37,7 +37,7 @@ jobs:
 
       - name: Test with pytest
         run: |
-          PYTHONPATH=$PYTHONPATH:$(pwd) pytest
+          pytest
           
 
     
